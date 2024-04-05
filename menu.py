@@ -19,7 +19,7 @@ if uploaded_file is not None:
     st.divider()
     st.text_area('',
                  "What would you like to do?")
-    with open(os.path.join(os.getcwd(), 'messages', instantiated_file_transfer.file), "rb") as file:
+    with open(os.path.join(os.getcwd(), instantiated_file_transfer.file), "rb") as file:
         read_message = file.read()
         col1, col2 = st.columns(2)
         with col1:
