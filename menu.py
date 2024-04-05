@@ -49,6 +49,11 @@ if uploaded_file is not None:
             if button3:
                 instantiated_file_transfer.decryption(os.path.join(os.getcwd(), 'messages/encrypted_message'))
                 st.write('Message decrypted successful')
+                st.write('Would you like to downloaded')
+
+                with open(os.path.join(os.getcwd(), "messages/decrypted_message.txt"), "rb") as decrypted_message_file:
+                    decrypted_message_read = decrypted_message_file.read()
+                    st.download_button('Download', decrypted_message_read)
         with col4:
             button4 = st.button('Integrity verification')
             if button4:
