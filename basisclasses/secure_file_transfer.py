@@ -5,7 +5,6 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
 import hashlib
-import os
 
 
 class SecureFileTransfer:
@@ -33,9 +32,6 @@ class SecureFileTransfer:
         self.decrypted_text = decrypted_text
         self.hashing_text = hashing_text
 
-
-
-
     def serialize_rsa_private_key(self) -> bytes:
         """
 
@@ -46,14 +42,8 @@ class SecureFileTransfer:
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption()
         )
-
         self.private_key = serialize_private_key
-
-        #with open(os.path.join(os.getcwd(), "rsa_keys/serialize_private_key.pem"), "wb") as serialize_private_key_file:
-            # serialize_private_key_file.write(serialize_private_key)
-
         print('Private key generated successfully')
-
         return self.private_key
 
     def serialize_rsa_public_key(self) -> bytes:
@@ -61,35 +51,25 @@ class SecureFileTransfer:
 
         :return:
         """
-
         serialize_public_key = SecureFileTransfer.public_key_nopem.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
         self.public_key = serialize_public_key
-        # with open(os.path.join(os.getcwd(), "rsa_keys/serialize_public_key.pem"), "wb") as serialize_public_key_file:
-            # serialize_public_key_file.write(serialize_public_key)
         print('Public key generated successfully')
         return self.public_key
-
 
     def encryption(self, serialized_public_key: bytes) -> bytes:
         """
 
-        :param message:
+        :param serialized_public_key:
         :return:
         """
-
-        # self.serialize_rsa_keys()
-
-        # with open(os.path.join(os.getcwd(), "rsa_keys/serialize_public_key.pem"), "rb") as public_key_file:
-            # serialized_public_key = public_key_file.read()
 
         public_key = serialization.load_pem_public_key(
             serialized_public_key,
             backend=default_backend()
         )
-
         encrypted = public_key.encrypt(
             self.plain_text,
             padding.OAEP(
@@ -98,12 +78,7 @@ class SecureFileTransfer:
                 label=None
             )
         )
-
-        # with open(os.path.join(os.getcwd(), "messages/encrypted_message"), "wb") as encrypted_message_file:
-            # encrypted_message_file.write(encrypted)
-
         print('Message encrypted successfully')
-
         return encrypted
 
     def decryption(self, encrypted_message: bytes, serialized_private_key: bytes) -> bytes:
@@ -118,7 +93,6 @@ class SecureFileTransfer:
             password=None,
             backend=default_backend()
         )
-
         message_after_decryption = private_key.decrypt(
             encrypted_message,
             padding.OAEP(
@@ -128,10 +102,6 @@ class SecureFileTransfer:
             )
         )
         self.decrypted_text = message_after_decryption
-
-        # with open(os.path.join(os.getcwd(), "messages/decrypted_message.txt"), "wb") as encrypted_message_file:
-            # encrypted_message_file.write(original_message)
-
         print('Message decrypted successfully')
         return self.decrypted_text
 
@@ -145,12 +115,7 @@ class SecureFileTransfer:
         hash_obj = hashlib.sha256()
         hash_obj.update(self.plain_text)
         self.hashing_text = hash_obj.digest()
-
-        # with open(os.path.join(os.getcwd(), "messages/hashing.txt"), "wb") as hashing_message_file:
-            # hashing_message_file.write(hash_obj.digest())
-
         print('Hashing generated successfully')
-
         return self.hashing_text
 
     def integrity_verification(self, decrypted_message, hashing) -> bool:
@@ -158,13 +123,6 @@ class SecureFileTransfer:
 
         :return:
         """
-
-        # with open(os.path.join(os.getcwd(), "messages/hashing.txt"), "rb") as hashing_file:
-            # hashing_read = hashing_file.read()
-
-        # with open(os.path.join(os.getcwd(), "messages/decrypted_message.txt"), "rb") as decrypted_message_file:
-            # decrypted_message_read = decrypted_message_file.read()
-
         hash_obj = hashlib.sha256()
         hash_obj.update(decrypted_message)
 

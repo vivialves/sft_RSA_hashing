@@ -2,7 +2,7 @@ from basisclasses.secure_file_transfer import SecureFileTransfer
 from google.cloud import firestore
 
 import streamlit as st
-import os
+
 
 def main() -> None:
     # Authenticate to Firestore with the JSON account key.
@@ -39,9 +39,7 @@ def main() -> None:
                 doc_ref.set({
                     "private_key": serialize_rsa_private_key
                 })
-                # with open(os.path.join(os.getcwd(), "messages/encrypted_message"), "rb") as encrypted_message_file:
-                    # encrypted_message_read = encrypted_message_file.read()
-                    # st.download_button('Download', encrypted_message_read)
+                st.download_button('Download', doc.get('private_key'))
         with col2:
             button2 = st.button('Generated Public Key')
             if button2:
@@ -52,9 +50,7 @@ def main() -> None:
                 doc_ref.update({
                     "public_key": serialize_rsa_public_key
                 })
-                # with open(os.path.join(os.getcwd(), "messages/hashing.txt"), "rb") as hashing_message_file:
-                     # hashing_message_read = hashing_message_file.read()
-                     # st.download_button('Download', hashing_message_read)
+                st.download_button('Download', doc.get('public_key'))
 
         st.divider()
         st.subheader("Would you like to encrypt or generating a hash?")
@@ -69,9 +65,7 @@ def main() -> None:
                 doc_ref.update({
                     "encrypted": encrypted
                 })
-                # with open(os.path.join(os.getcwd(), "messages/encrypted_message"), "rb") as encrypted_message_file:
-                #    encrypted_message_read = encrypted_message_file.read()
-                #    st.download_button('Download', encrypted_message_read)
+                st.download_button('Download', doc.get('encrypted'))
         with col4:
             button4 = st.button('Hashing')
             if button4:
@@ -82,9 +76,7 @@ def main() -> None:
                 doc_ref.update({
                     "hashing": hashing
                 })
-                # with open(os.path.join(os.getcwd(), "messages/hashing.txt"), "rb") as hashing_message_file:
-                    # hashing_message_read = hashing_message_file.read()
-                    # st.download_button('Download', hashing_message_read)
+                st.download_button('Download', doc.get('hashing'))
         st.divider()
         col5, col6 = st.columns(2)
         with col5:
@@ -99,9 +91,7 @@ def main() -> None:
                 doc_ref.update({
                     "decrypted_message": decryption
                 })
-                # with open(os.path.join(os.getcwd(), "messages/decrypted_message.txt"), "rb") as decrypted_message_file:
-                    # decrypted_message_read = decrypted_message_file.read()
-                    # st.download_button('Download', decrypted_message_read)
+                st.download_button('Download', doc.get('decrypted_message'))
         with col6:
             button6 = st.button('Integrity verification')
             if button6:
@@ -110,7 +100,6 @@ def main() -> None:
                     st.write('File received and verified successfully')
                 else:
                     st.write('File verification failed')
-
 
 
 if __name__ == "__main__":
