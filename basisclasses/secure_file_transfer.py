@@ -9,47 +9,77 @@ import os
 
 class SecureFileTransfer:
 
-    def __init__(self: object, file: str) -> None:
-        self.file = file
+    def __init__(self: object,
+                 plain_text: str,
+                 private_key: bytes = 'default',
+                 public_key: bytes = 'default',
+                 encrypted_text: bytes = 'default',
+                 decrypted_text: bytes = 'default',
+                 hashing_text: bytes = 'default'
+                 ) -> None:
+
+        self.plain_text = plain_text
+        self.private_key = private_key
+        self.public_key = public_key
+        self.encrypted_text = encrypted_text
+        self.decrypted_text = decrypted_text
+        self.hashing_text = hashing_text
 
     def generate_rsa_keys(self) -> tuple:
         """
 
         :return:
         """
-        private_key = rsa.generate_private_key(
+        private_key_nopem = rsa.generate_private_key(
             public_exponent=65537,
             key_size=2048,
             backend=default_backend()
         )
-        public_key = private_key.public_key()
-        return private_key, public_key
+        public_key_nopem = private_key_nopem.public_key()
+        return private_key_nopem, public_key_nopem
 
-    def serialize_rsa_keys(self) -> None:
+    def serialize_rsa_private_key(self) -> None:
         """
 
         :return:
         """
-        private_key, public_key = self.generate_rsa_keys()
+        private_key_nopem, public_key_nopem = self.generate_rsa_keys()
 
-        serialize_private_key = private_key.private_bytes(
+        serialize_private_key = private_key_nopem.private_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PrivateFormat.PKCS8,
             encryption_algorithm=serialization.NoEncryption()
         )
 
+        self.private_key = serialize_private_key
+
         with open(os.path.join(os.getcwd(), "rsa_keys/serialize_private_key.pem"), "wb") as serialize_private_key_file:
             serialize_private_key_file.write(serialize_private_key)
 
-        serialize_public_key = public_key.public_bytes(
+        print('Private key generated successfully')
+
+        return self.private_key
+
+    def serialize_rsa_public_key(self) -> None:
+        """
+
+        :return:
+        """
+
+        private_key_nopem, public_key_nopem = self.generate_rsa_keys()
+
+        serialize_public_key = public_key_nopem.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
 
+        self.public_key = serialize_public_key
         with open(os.path.join(os.getcwd(), "rsa_keys/serialize_public_key.pem"), "wb") as serialize_public_key_file:
             serialize_public_key_file.write(serialize_public_key)
 
-        print('RSA keys generated successful')
+        print('Public key generated successfully')
+
+        return self.public_key
 
     def encryption(self, message: bytes) -> bytes:
         """
