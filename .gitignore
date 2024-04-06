@@ -10,6 +10,8 @@ __pycache__
 
 *.pyc
 
+basisclasses/*.pyc
+
 .env
 
 .idea/*
