@@ -21,6 +21,6 @@ basisclasses/__pycache__/*.pyc
 
 sft_RSA_hashing/lib/*
 
-firestore_key.json
+scripts/firestore_key.json
 
 secrets.toml

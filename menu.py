@@ -1,12 +1,17 @@
+from google.oauth2 import service_account
+
 from basisclasses.secure_file_transfer import SecureFileTransfer
 from google.cloud import firestore
 
 import streamlit as st
-
+import json
 
 def main() -> None:
     # Authenticate to Firestore with the JSON account key.
-    db = firestore.Client.from_service_account_json("firestore_key.json")
+
+    key_dict = json.loads(st.secrets["textkey"])
+    creds = service_account.Credentials.from_service_account_info(key_dict)
+    db = firestore.Client(credentials=creds, project="stremlitApp")
     # Create a reference to the Google post.
     doc_ref = db.collection("secure_file_transfer").document("secure_file")
     # Then get the data at that reference.
