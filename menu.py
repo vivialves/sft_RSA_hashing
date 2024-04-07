@@ -1,3 +1,4 @@
+from time import sleep
 from google.oauth2 import service_account
 
 from basisclasses.secure_file_transfer import SecureFileTransfer
@@ -7,8 +8,8 @@ import streamlit as st
 import json
 
 def main() -> None:
-    # Authenticate to Firestore with the JSON account key.
 
+    # Authenticate to Firestore with the JSON account key.
     key_dict = json.loads(st.secrets["textkey"])
     creds = service_account.Credentials.from_service_account_info(key_dict)
     db = firestore.Client(credentials=creds)
@@ -32,6 +33,9 @@ def main() -> None:
                      uploaded_file.getvalue(),
                      )
         plain_text = SecureFileTransfer(plain_text=uploaded_file.getvalue())
+        doc_ref.set({
+            "plain_text": uploaded_file.getvalue()
+        })
         st.divider()
         col1, col2 = st.columns(2)
         with col1:
@@ -40,11 +44,11 @@ def main() -> None:
                 serialize_rsa_private_key = plain_text.serialize_rsa_private_key()
                 st.text_area('', serialize_rsa_private_key)
                 st.write(':orange[Private key generated successful!]')
-                st.write(':blue[Would you like to download?]')
-                doc_ref.set({
-                    "private_key": serialize_rsa_private_key
+                doc_ref.update({
+                    'private_key': serialize_rsa_private_key
                 })
-                st.download_button('Download', doc.get('private_key'))
+                st.write(':blue[Would you like to download?]')
+                # st.download_button('Download', doc.get('private_key'))
         with col2:
             button2 = st.button('Generated Public Key')
             if button2:
@@ -53,10 +57,9 @@ def main() -> None:
                 st.write(':orange[Public key generated successful!]')
                 st.write(':blue[Would you like to download?]')
                 doc_ref.update({
-                    "public_key": serialize_rsa_public_key
+                    'public_key': serialize_rsa_public_key
                 })
-                st.download_button('Download', doc.get('public_key'))
-
+                # st.download_button('Download', doc.get("public_key"))
         st.divider()
         st.subheader("Would you like to encrypt or generating a hash?")
         col3, col4 = st.columns(2)
@@ -70,7 +73,7 @@ def main() -> None:
                 doc_ref.update({
                     "encrypted": encrypted
                 })
-                st.download_button('Download', doc.get('encrypted'))
+                # st.download_button('Download', doc.get('encrypted'))
         with col4:
             button4 = st.button('Hashing')
             if button4:
@@ -81,7 +84,7 @@ def main() -> None:
                 doc_ref.update({
                     "hashing": hashing
                 })
-                st.download_button('Download', doc.get('hashing'))
+                # st.download_button('Download', doc.get('hashing'))
         st.divider()
         col5, col6 = st.columns(2)
         with col5:
@@ -96,7 +99,7 @@ def main() -> None:
                 doc_ref.update({
                     "decrypted_message": decryption
                 })
-                st.download_button('Download', doc.get('decrypted_message'))
+                # st.download_button('Download', doc.get('decrypted_message'))
         with col6:
             button6 = st.button('Integrity verification')
             if button6:
