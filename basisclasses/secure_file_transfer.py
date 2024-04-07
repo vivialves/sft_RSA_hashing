@@ -9,12 +9,14 @@ import hashlib
 
 class SecureFileTransfer:
 
-    private_key_nopem = rsa.generate_private_key(
+    # global variable
+    private_key_nopem: bytes = rsa.generate_private_key(
         public_exponent=65537,
         key_size=2048,
         backend=default_backend())
 
-    public_key_nopem = private_key_nopem.public_key()
+    # global variable
+    public_key_nopem: bytes = private_key_nopem.public_key()
 
     def __init__(self: object,
                  plain_text: str,
@@ -34,8 +36,7 @@ class SecureFileTransfer:
 
     def serialize_rsa_private_key(self) -> bytes:
         """
-
-        :return:
+        :return: the private key after serialization
         """
         serialize_private_key = SecureFileTransfer.private_key_nopem.private_bytes(
             encoding=serialization.Encoding.PEM,
@@ -48,8 +49,7 @@ class SecureFileTransfer:
 
     def serialize_rsa_public_key(self) -> bytes:
         """
-
-        :return:
+        :return: the public key after serialization
         """
         serialize_public_key = SecureFileTransfer.public_key_nopem.public_bytes(
             encoding=serialization.Encoding.PEM,
@@ -61,9 +61,9 @@ class SecureFileTransfer:
 
     def encryption(self, serialized_public_key: bytes) -> bytes:
         """
-
+         This method receive the serialized public key from database and encrypt a message.
         :param serialized_public_key:
-        :return:
+        :return:an encrypted message
         """
 
         public_key = serialization.load_pem_public_key(
@@ -83,10 +83,10 @@ class SecureFileTransfer:
 
     def decryption(self, encrypted_message: bytes, serialized_private_key: bytes) -> bytes:
         """
-
+         This method receive two parameters from database and decrypt a message.
         :param encrypted_message:
         :param serialized_private_key:
-        :return:
+        :return: a decrypted message
         """
         private_key = serialization.load_pem_private_key(
             serialized_private_key,
@@ -107,8 +107,8 @@ class SecureFileTransfer:
 
     def hashing(self) -> bytes:
         """
-
-        :return:
+        This method returns the hashing of a world
+        :return: hashing of a message
         """
 
         hash_obj = hashlib.sha256()
@@ -119,7 +119,7 @@ class SecureFileTransfer:
 
     def integrity_verification(self, decrypted_message, hashing) -> bool:
         """
-        Function that test integrity of hashing
+        This method tests integrity of hashing
         :return: Return True if hashing of decrypted message and the hashing of the message is the same.
         """
         hash_obj = hashlib.sha256()
