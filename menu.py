@@ -46,9 +46,9 @@ def main() -> None:
                 doc_ref.update({
                     'private_key': serialize_rsa_private_key
                 })
-                # st.write(':blue[Would you like to download?]')
-                # if st.download_button('Download', doc.get('private_key'), file_name='private key'):
-                    # st.write(':blue[Download]')
+                st.write(':blue[Would you like to download?]')
+                if st.download_button('Download', doc.get('private_key'), file_name='private key'):
+                    st.write(':blue[Download]')
         with col2:
             button2 = st.button('Generated Public Key')
             if button2:
@@ -58,9 +58,9 @@ def main() -> None:
                 doc_ref.update({
                     'public_key': serialize_rsa_public_key
                 })
-                # st.write(':blue[Would you like to download?]')
-                # if st.download_button('Download', doc.get("public_key"), file_name='public key'):
-                    # st.write(':blue[Download]')
+                st.write(':blue[Would you like to download?]')
+                if st.download_button('Download', doc.get("public_key"), file_name='public key'):
+                    st.write(':blue[Download]')
         st.divider()
         st.subheader("Would you like to encrypt or generating a hash?")
         col3, col4 = st.columns(2)
@@ -74,9 +74,9 @@ def main() -> None:
                 doc_ref.update({
                     "encrypted": encrypted
                 })
-                # st.write(':blue[Would you like to download?]')
-                # if st.download_button('Download', doc.get('encrypted'), file_name=encrypted):
-                    # st.write(':blue[Download]')
+                st.write(':blue[Would you like to download?]')
+                if st.download_button('Download', doc.get('encrypted'), file_name='encrypted'):
+                    st.write(':blue[Download]')
         with col4:
             button4 = st.button('Hashing')
             if button4:
@@ -86,9 +86,9 @@ def main() -> None:
                 doc_ref.update({
                     "hashing": hashing
                 })
-                # st.write(':blue[Would you like to download?]')
-                # if st.download_button('Download', doc.get('hashing')):
-                    # st.write(':blue[Download]')
+                st.write(':blue[Would you like to download?]')
+                if st.download_button('Download', doc.get('hashing')):
+                    st.write(':blue[Download]')
         st.divider()
         st.subheader("Would you like to decrypt or check integrity?")
         col5, col6 = st.columns(2)
@@ -104,9 +104,9 @@ def main() -> None:
                 doc_ref.update({
                     "decrypted_message": decryption
                 })
-                # st.write(':blue[Would you like to download?]')
-                # if st.download_button('Download', doc.get('decrypted_message')):
-                    # st.write(':blue[Download]')
+                st.write(':blue[Would you like to download?]')
+                if st.download_button('Download', doc.get('decrypted_message')):
+                    st.write(':blue[Download]')
         with col6:
             button6 = st.button('Integrity verification')
             if button6:
