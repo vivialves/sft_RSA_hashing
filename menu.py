@@ -87,7 +87,7 @@ def main() -> None:
                     "hashing": hashing
                 })
                 st.write(':blue[Would you like to download?]')
-                if st.download_button('Download', doc.get('hashing')):
+                if st.download_button('Download', doc.get('hashing'), file_name='hashing'):
                     st.write(':blue[Download]')
         st.divider()
         st.subheader("Would you like to decrypt or check integrity?")
@@ -105,7 +105,7 @@ def main() -> None:
                     "decrypted_message": decryption
                 })
                 st.write(':blue[Would you like to download?]')
-                if st.download_button('Download', doc.get('decrypted_message')):
+                if st.download_button('Download', doc.get('decrypted_message'), file_name='decrypted_message'):
                     st.write(':blue[Download]')
         with col6:
             button6 = st.button('Integrity verification')
