@@ -105,10 +105,9 @@ class SecureFileTransfer:
         print('Message decrypted successfully')
         return self.decrypted_text
 
-    def hashing(self) -> hash:
+    def hashing(self) -> bytes:
         """
 
-        :param message:
         :return:
         """
 
@@ -120,8 +119,8 @@ class SecureFileTransfer:
 
     def integrity_verification(self, decrypted_message, hashing) -> bool:
         """
-
-        :return:
+        Function that test integrity of hashing
+        :return: Return True if hashing of decrypted message and the hashing of the message is the same.
         """
         hash_obj = hashlib.sha256()
         hash_obj.update(decrypted_message)
