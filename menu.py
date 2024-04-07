@@ -33,9 +33,6 @@ def main() -> None:
                      uploaded_file.getvalue(),
                      )
         plain_text = SecureFileTransfer(plain_text=uploaded_file.getvalue())
-        doc_ref.set({
-            "plain_text": uploaded_file.getvalue()
-        })
         st.divider()
         col1, col2 = st.columns(2)
         with col1:
@@ -44,7 +41,7 @@ def main() -> None:
                 serialize_rsa_private_key = plain_text.serialize_rsa_private_key()
                 st.text_area('', serialize_rsa_private_key)
                 st.write(':orange[Private key generated successful!]')
-                doc_ref.update({
+                doc_ref.set({
                     'private_key': serialize_rsa_private_key
                 })
                 st.write(':blue[Would you like to download?]')
